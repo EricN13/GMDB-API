@@ -19,4 +19,8 @@ public class MovieSevice {
 
         return movieRepository.findAll();
     }
+
+    public Movie getMovieByTitle(String title) {
+        return movieRepository.findByTitle(title);
+    }
 }

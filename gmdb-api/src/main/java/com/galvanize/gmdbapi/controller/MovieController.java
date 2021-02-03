@@ -22,6 +22,13 @@ public class MovieController {
     @GetMapping("/movies")
     public List<Movie> getAllMovies(){
         return movieService.getAll();
+
+    }
+
+    @GetMapping("/movie{title}")
+    public Movie getMovieByTitle(@PathVariable String title){
+        return this.movieService.getMovieByTitle(title);
+
     }
 
 }

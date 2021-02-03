@@ -33,7 +33,10 @@ public class MovieIntegrationTest {
     @Test
     public void addMovie() throws Exception {
 
-        Movie movie= new Movie("arrow","Bob");
+        Movie movie= new Movie("The Avengers", "Joss Whedon", "Robert Downey Jr.," +
+                " Chris Evans, Mark Ruffalo, Chris Hemsworth", "2002",
+                "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.", "5");
+
         String postedMovie=mapper.writeValueAsString(movie);
 
         mockMvc.perform(post("/movie")
@@ -44,9 +47,32 @@ public class MovieIntegrationTest {
     @Test
     public void getAllMovies() throws Exception {
         mockMvc.perform(get("/movies"))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isOk());
+
+    }
+    @Test
+    public void getMovieDetails() throws Exception {
+        Movie movie = new Movie("The Avengers", "Joss Whedon", "Robert Downey Jr.," +
+                " Chris Evans, Mark Ruffalo, Chris Hemsworth", "2002",
+                "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.", "5");
+
+        String postedMovie=mapper.writeValueAsString(movie);
+        String title=movie.getTitle();
+
+        mockMvc.perform(post("/movie")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(postedMovie))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/movie"+title))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.director").value("Joss Whedon"))
+                .andExpect(jsonPath("$.actors").value("Robert Downey Jr.," +
+                        " Chris Evans, Mark Ruffalo, Chris Hemsworth"))
+                .andExpect(jsonPath("$.release").value("2002")).andReturn();
 
     }
     }
+
 
 

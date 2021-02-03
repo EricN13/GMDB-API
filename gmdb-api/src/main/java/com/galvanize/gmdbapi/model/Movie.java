@@ -1,10 +1,9 @@
 package com.galvanize.gmdbapi.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Movie {
@@ -12,12 +11,52 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    private String actor;
-    public Movie(){}
+    private String director;
+    private String actors;
+    private String release;
+    private String description;
+    private String rating;
 
 
-    public Movie(String title, String actor) {
-        this.title=title;
-        this.actor=actor;
+
+    public Movie( String title,String director,String actors,String release,String description,String rating) {
+    this.title=title;
+    this.director=director;
+    this.actors=actors;
+    this.release=release;
+    this.description=description;
+    this.rating=rating;
+    this.actors=actors;
+    }
+    public Movie(){
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public String getActors() {
+        return actors;
+    }
+
+    public String getRelease() {
+        return release;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getRating() {
+        return rating;
     }
 }
