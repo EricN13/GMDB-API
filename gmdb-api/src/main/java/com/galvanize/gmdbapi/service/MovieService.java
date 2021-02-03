@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
-public class MovieSevice {
+public class MovieService {
     @Autowired
     MovieRepository movieRepository;
 
@@ -31,4 +32,13 @@ public class MovieSevice {
             throw new NotExistMovieException("Movie Doesn't exist");
         }
     }
+
+    public Movie setRating(String title, Movie movie) {
+        String rating=movie.getRating();
+        Movie movieData = this.movieRepository.findByTitle(title);
+            movie.setRating(rating);
+            return this.movieRepository.save(movie);
+
+        }
+
 }

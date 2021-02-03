@@ -1,9 +1,8 @@
 package com.galvanize.gmdbapi.integrationTests;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.galvanize.gmdbapi.exception.NotExistMovieException;
 import com.galvanize.gmdbapi.model.Movie;
+import com.galvanize.gmdbapi.service.MovieService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,10 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -34,6 +32,8 @@ public class MovieIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
+    @Autowired
+    MovieService movieSevice;
 
     @Test
     public void addMovie() throws Exception {
@@ -81,6 +81,8 @@ public class MovieIntegrationTest {
 
     }
 
+    //Not Done
+
 //    @Test
 //    public void displayErrorMessageForNoExistingTitle() throws Exception {
 //        Movie movie = new Movie("The Avengers", "Joss Whedon", "Robert Downey Jr.," +
@@ -103,6 +105,31 @@ public class MovieIntegrationTest {
 
 //
 //    }
+
+    @Test
+    public void ratingAMovie() throws Exception {
+        Movie movie = new Movie("The Avengers", "Joss Whedon", "Robert Downey Jr.," +
+                " Chris Evans, Mark Ruffalo, Chris Hemsworth", "2002",
+                "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.", "1");
+
+        String postedMovie=mapper.writeValueAsString(movie);
+        mockMvc.perform(post("/movie")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(postedMovie))
+                .andExpect(status().isCreated());
+
+
+      String title=movie.getTitle();
+      movie.setRating("5");
+      String postedMovie1=mapper.writeValueAsString(movie);
+      mockMvc
+              .perform(put("/movie"+title)
+              .contentType(MediaType.APPLICATION_JSON).content(postedMovie1))
+              .andExpect(status().isOk())
+              .andExpect(jsonPath("$.title").value("The Avengers"))
+              .andExpect(jsonPath("$.rating").value("5")).andReturn();
+      
+    }
 
     }
 
