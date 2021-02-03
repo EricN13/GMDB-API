@@ -26,7 +26,7 @@ public class MovieController {
     }
 
     @GetMapping("/movie{title}")
-    public Movie getMovieByTitle(@PathVariable String title){
+    public Movie getMovieByTitle(@PathVariable String title) throws Exception {
         return this.movieService.getMovieByTitle(title);
 
     }
